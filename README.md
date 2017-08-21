@@ -1,6 +1,6 @@
 # Exercises from K&R's "The C Programming Language, 2nd ed."
 
-Exercises from the [K&amp;R book](https://en.wikipedia.org/wiki/The_C_Programming_Language). Directories are book sections (CHAPTER-SECTION), programs are answers to the exercises described at the end of the section. `Other` directory is exercises not found in the book, their source will be noted in the file itself.
+Exercises from the [K&amp;R book](https://en.wikipedia.org/wiki/The_C_Programming_Language). Directories are book sections `[Chapter]-[Section]`, programs are answers to the exercises described at the end of the section. `Other` directory is exercises not found in the book, their source will be noted in the files themselves.
 
 ### 1.1
 - [x] 1-1
