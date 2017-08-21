@@ -4,7 +4,7 @@ Exercises from the [K&amp;R book](https://en.wikipedia.org/wiki/The_C_Programmin
 
 ### 1.1
 - [x] 1-1
-- [ ] 1-2
+- [x] 1-2
 
 ### 1.2
 - [x] 1-3
