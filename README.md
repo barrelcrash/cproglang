@@ -19,7 +19,7 @@ Exercises from the [K&amp;R book](https://en.wikipedia.org/wiki/The_C_Programmin
 - [x] 1-8
 - [x] 1-9
 - [x] 1-10
-- [ ] 1-11
+- [x] 1-11
 - [x] 1-12
 
 ### 1.6
