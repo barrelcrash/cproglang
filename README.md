@@ -27,7 +27,7 @@ Exercises from the [K&amp;R book](https://en.wikipedia.org/wiki/The_C_Programmin
 - [ ] 1-14
 
 ### 1.7
-- [ ] 1-15
+- [x] 1-15
 
 ### 1.9
 - [ ] 1-16
