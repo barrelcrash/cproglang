@@ -1,9 +1,16 @@
 /*
- * this solution is not quite in the spirit of the K&R requirements
- * as I understand them - it does not track tab stops independent of
- * a given span of whitespace, but takes whitespace span by span and
- * replaces them with as many tabs as it can with a given (assumed)
- * tab length, and then fills the remainder with spaces
+ * "write a program `entab` that replaces strings of blanks by
+ * the minimum number of tabs and blanks to achieve the same
+ * spacing."
+ *
+ * author: barrelcrash
+ *
+ * author's note: many solutions for this problem simply replace
+ * a given tab's worth of whitespaces, as they are encountered,
+ * with a tab, rather than keeping track of tabstop locations, 
+ * adding a tab, and removing the appropriate amount of
+ * whitespace. this solution does not handle mixed tabs and
+ * spaces, but satisfies K&R's criteria as given
  */
 #include <stdio.h>
 
