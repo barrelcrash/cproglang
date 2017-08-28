@@ -34,35 +34,32 @@ int main() {
 void entab(char s[], int len) {
 
   int ws = 0; // track spaces
+  int tabspace = 0; // track tab-occupied space
 
   for (int i = 0; i < len; i++) {
-    // count spaces
+    int isTabStop = ((i + tabspace + 1) % TABSTOP) == 0;
     if (s[i] == ' ') {
       ws++;
-    } else if (s[i] != ' ') {
-      if (ws >= TABSTOP) {
-        int numTabs = (ws - (ws % TABSTOP)) / TABSTOP;
-        i -= ws; 
-
-        // insert tabs
-        int nI = i + numTabs;
-        for (i; i < nI; i++) {
-          s[i] = '\t';
-        }
-
-        // add extra spaces if any
-        int nW = i + (ws % TABSTOP);
-        for (i; i < nW; i++) {
-          s[i] = ' ';
-        }
-
-        // offset remaining chars
-        for (int t = i; t < len; t++) {
-          s[t] = s[t + (ws - numTabs - (ws % TABSTOP))];
-        }
-      }
-      
+    } else if (s[i] != ' ' && !isTabStop) {
       ws = 0;
+    }
+
+    if (isTabStop) {
+      // if we arrive at a tabstop and more than one space, entab
+      if (ws > 1) {
+        i -= (ws - 1);
+        s[i] = '\t';
+        i++;
+        tabspace += (ws - 1);
+
+        for (int t = i; t < len; t++) {
+          s[t] = s[t + (ws - 1)];
+        }
+
+        len -= ws - 1;
+      }
+
+      ws = s[i] == ' ' ? 1 : 0;
     }
   }
 }
