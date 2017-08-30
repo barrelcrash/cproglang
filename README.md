@@ -64,7 +64,7 @@ Exercises from the [K&amp;R book](https://en.wikipedia.org/wiki/The_C_Programmin
 - [ ] 2-9
 
 ### 2.11
-- [ ] 2-10
+- [x] 2-10
 
 ### 3.3
 - [ ] 3-1
