@@ -53,7 +53,7 @@ Exercises from the [K&amp;R book](https://en.wikipedia.org/wiki/The_C_Programmin
 
 ### 2.8
 - [x] 2-4
-- [ ] 2-5
+- [x] 2-5
 
 ### 2.9
 - [ ] 2-6
