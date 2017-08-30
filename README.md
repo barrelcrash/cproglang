@@ -49,7 +49,7 @@ Exercises from the [K&amp;R book](https://en.wikipedia.org/wiki/The_C_Programmin
 - [x] 2-2
 
 ### 2.7
-- [ ] 2-3 [WIP]
+- [x] 2-3
 
 ### 2.8
 - [x] 2-4
