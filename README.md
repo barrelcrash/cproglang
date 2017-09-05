@@ -2,18 +2,12 @@
 
 Exercises from the [K&amp;R book](https://en.wikipedia.org/wiki/The_C_Programming_Language). Directories are book sections `[Chapter]-[Section]`, programs are answers to the exercises described at the end of the section. `Other` directory is exercises not found in the book, their source will be noted in the files themselves.
 
-### 1.1
+### 1
 - [x] 1-1
 - [x] 1-2
-
-### 1.2
 - [x] 1-3
 - [x] 1-4
-
-### 1.3
 - [x] 1-5
-
-### 1.5
 - [x] 1-6
 - [x] 1-7
 - [x] 1-8
@@ -21,61 +15,51 @@ Exercises from the [K&amp;R book](https://en.wikipedia.org/wiki/The_C_Programmin
 - [x] 1-10
 - [x] 1-11
 - [x] 1-12
-
-### 1.6
 - [x] 1-13
 - [ ] 1-14
-
-### 1.7
 - [x] 1-15
-
-### 1.9
 - [ ] 1-16
 - [x] 1-17
 - [x] 1-18
 - [x] 1-19
-
-### 1.10
 - [x] 1-20
 - [x] 1-21
 - [ ] 1-22
 - [ ] 1-23
 - [ ] 1-24
 
-### 2.2
+### 2
 - [x] 2-1
-
-### 2.6
 - [x] 2-2
-
-### 2.7
 - [x] 2-3
-
-### 2.8
 - [x] 2-4
 - [x] 2-5
-
-### 2.9
 - [ ] 2-6
 - [ ] 2-7
 - [ ] 2-8
-
-### 2.10
 - [ ] 2-9
-
-### 2.11
 - [x] 2-10
 
-### 3.3
+### 3
 - [ ] 3-1
-
-### 3.4
 - [ ] 3-2
-
-### 3.5
 - [ ] 3-3
-
-### 3.6
 - [ ] 3-4
 - [ ] 3-5
 - [ ] 3-6
+
+### 4
+- [ ] 4-1
+- [ ] 4-2
+- [ ] 4-3
+- [ ] 4-4
+- [ ] 4-5
+- [ ] 4-6
+- [ ] 4-7
+- [ ] 4-8
+- [ ] 4-9
+- [ ] 4-10
+- [ ] 4-11
+- [ ] 4-12
+- [ ] 4-13
+- [ ] 4-14
