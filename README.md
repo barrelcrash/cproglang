@@ -43,7 +43,7 @@ Exercises from the [K&amp;R book](https://en.wikipedia.org/wiki/The_C_Programmin
 ### 3
 - [x] 3-1
 - [x] 3-2
-- [ ] 3-3
+- [x] 3-3
 - [ ] 3-4
 - [ ] 3-5
 - [ ] 3-6
