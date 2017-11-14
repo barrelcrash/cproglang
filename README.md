@@ -85,3 +85,6 @@ Exercises from the [K&amp;R book](https://en.wikipedia.org/wiki/The_C_Programmin
 - [ ] 5-18
 - [ ] 5-19
 - [ ] 5-20
+
+### Other
+- [x] Latin Squares
