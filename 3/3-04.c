@@ -50,6 +50,8 @@ int main() {
   printitoa(-4);
 
   printitoa(INT_MIN);
+
+  return 0;
 }
 
 void printitoa(int n) {
@@ -67,7 +69,7 @@ void printitoa(int n) {
 void itoa(int n, char s[]) {
   int i, sign;
 
-  unsigned int n2;
+  unsigned int n2 = n;
 
   if ((sign = n) < 0)
     n2 = -n;
