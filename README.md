@@ -49,7 +49,7 @@ Exercises from the [K&amp;R book](https://en.wikipedia.org/wiki/The_C_Programmin
 - [x] 3-6
 
 ### 4
-- [ ] 4-1
+- [x] 4-1
 - [ ] 4-2
 - [ ] 4-3
 - [ ] 4-4
