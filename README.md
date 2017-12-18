@@ -50,7 +50,7 @@ Exercises from the [K&amp;R book](https://en.wikipedia.org/wiki/The_C_Programmin
 
 ### 4
 - [x] 4-1
-- [ ] 4-2
+- [x] 4-2
 - [ ] 4-3
 - [ ] 4-4
 - [ ] 4-5
