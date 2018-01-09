@@ -9,10 +9,9 @@ void ungetch(int);
 
 int main()
 {
-  int *pn;
-
-  while(getint(*pn) != EOF)
-    printf("%d\n", *pn);
+  int mpn;
+  getint(&mpn);
+  printf("%d \n", mpn);
 }
 
 // getint: get next integer from input into *pn
@@ -20,18 +19,21 @@ int getint(int *pn)
 {
   int c, sign;
 
-  while (isspace(c = getch()))
+  while (isspace(c = getch())) // ignore preceding whitespace
     ;
   if (!isdigit(c) && c != EOF && c != '+' && c != '-') {
     ungetch(c); // not a number
     return 0;
   }
   sign = (c == '-') ? -1 : 1;
-  if (c == '+' || c == '-')
-    c = getch();
-  for (*pn = 0; isdigit(c); c = getch())
-    *pn = 10 * *pn + (c - '0');
-  if (c != EOF)
+  if (c == '+' || c == '-') // if sign, move to next
+    c = getch(); 
+  if (isdigit(c)) { // by now we should encounter a digit
+    for (*pn = 0; isdigit(c); c = getch())
+      *pn = 10 * *pn + (c - '0');
+    *pn *= sign;
+  }
+  if (c != EOF) // no more digits, push last (non-digit) char back to input
     ungetch(c);
   return c;
 }
@@ -41,7 +43,11 @@ int bufp = 0;
 
 int getch(void) // get a possibly pushed back character
 {
-  return (bufp > 0) ? buf[--bufp] : getchar();
+  if (bufp > 0) {
+    return buf[--bufp];
+  } else {
+    return getchar();
+  }
 }
 
 void ungetch(int c) // push a character back on input
