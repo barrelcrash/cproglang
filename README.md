@@ -65,7 +65,7 @@ Exercises from the [K&amp;R book](https://en.wikipedia.org/wiki/The_C_Programmin
 - [ ] 4-14
 
 ### 5
-- [ ] 5-1
+- [x] 5-1
 - [ ] 5-2
 - [ ] 5-3
 - [ ] 5-4
