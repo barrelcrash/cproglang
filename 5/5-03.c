@@ -40,9 +40,9 @@ void astrcat(char s[], char t[])
 // strcat - pointer version
 void pstrcat(char *s, char *t)
 {
-  while (*s != '\0') // find end of s
+  while (*s) // find end of s
     *s++; 
 
-  while ((*s++ = *t++) != '\0') // copy t
+  while (*s++ = *t++) // copy t
     ;
 }
