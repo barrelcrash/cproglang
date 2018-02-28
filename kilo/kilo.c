@@ -32,10 +32,10 @@ void enableRawMode() {
   // bit flipping
   raw.c_iflag &= ~(BRKINT | ICRNL | INPCK | ISTRIP | IXON); // disable Ctrl-S, Ctrl-Q, Ctrl-M processing, misc
   raw.c_oflag &= ~(OPOST); // disable output post-processing
-  raw.c_cflag |= (CS8);
+  raw.c_cflag |= (CS8); // set char byte len to 8
   raw.c_lflag &= ~(ECHO | ICANON | ISIG | IEXTEN); // disable echo, canonical, Ctrl-Z, Ctrl-C
-  raw.c_cc[VMIN] = 0;
-  raw.c_cc[VTIME] = 1;
+  raw.c_cc[VMIN] = 0; // min for read() to return
+  raw.c_cc[VTIME] = 1; // interval for read() to return
 
   tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw); // set terminal attr
 }
