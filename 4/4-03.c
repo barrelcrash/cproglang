@@ -1,10 +1,13 @@
 /* this program forms the basis on which exercises 4-3 through 4-10 build */
 
+#include <ctype.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h> /* for atof() - in K&R, math.h is referenced - this is an anachronism */
 
+#define BUFSIZE 100
 #define MAXOP 100 /* max size of operand or operator */
+#define MAXVAL  100 /* maximum depth of val stack */
 #define NUMBER '0' /* signal that a number was found */
 
 int getop(char []);
@@ -62,7 +65,6 @@ int main(void)
   return 0;
 }
 
-#define MAXVAL  100 /* maximum depth of val stack */
 
 int sp = 0; /* next free stack position */
 double val[MAXVAL]; /* value stack */
@@ -88,8 +90,6 @@ double pop(void)
   }
 }
 
-#include <ctype.h>
-
 int getch(void);
 void ungetch(int);
 
@@ -98,16 +98,24 @@ int getop(char s[])
 {
   int i, c, sign;
 
+  // skip ws
   while((s[0] = c = getch()) == ' ' || c == '\t')
     ;
 
   s[1] = '\0';
   if(!isdigit(c) && c != '.' && c != '-')
     return c; /* not a number */
+
   i = 0;
-  if(c == '-')
-    while(isdigit(s[++i] = c = getch()))
-      ;
+  if(c == '-') {
+    if (isdigit(s[++i] = c = getch())) {
+      while(isdigit(s[++i] = c = getch()))
+        ;
+    } else {
+      ungetch(c);
+      return '-';
+    }
+  }
   if(isdigit(c)) /* collect integer part */
     while(isdigit(s[++i] = c = getch()))
       ;
@@ -119,8 +127,6 @@ int getop(char s[])
     ungetch(c);
   return NUMBER;
 }
-
-#define BUFSIZE 100
 
 char buf[BUFSIZE]; /* buffer for ungetch */
 int bufp = 0; /* next free position in buf */
