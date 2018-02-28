@@ -55,7 +55,7 @@ A "show my work" repo for my C studies. This repository originally consisted of 
 ### 4
 - [x] 4-1
 - [x] 4-2
-- [ ] 4-3
+- [x] 4-3
 - [ ] 4-4
 - [ ] 4-5
 - [ ] 4-6
