@@ -1,5 +1,6 @@
 /* this program forms the basis on which exercises 4-3 through 4-10 build */
 
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h> /* for atof() - in K&R, math.h is referenced - this is an anachronism */
 
@@ -39,6 +40,13 @@ int main(void)
         op2 = pop();
         if(op2 != 0.0)
           push(pop() / op2);
+        else
+          printf("error: zero divisor\n");
+        break;
+      case '%':
+        op2 = pop();
+        if (op2 != 0.0)
+          push(fmod(pop(), op2));
         else
           printf("error: zero divisor\n");
         break;
@@ -88,15 +96,18 @@ void ungetch(int);
 /* getop: get next operator or numeric operand */
 int getop(char s[])
 {
-  int i, c;
+  int i, c, sign;
 
   while((s[0] = c = getch()) == ' ' || c == '\t')
     ;
 
   s[1] = '\0';
-  if(!isdigit(c) && c != '.')
+  if(!isdigit(c) && c != '.' && c != '-')
     return c; /* not a number */
   i = 0;
+  if(c == '-')
+    while(isdigit(s[++i] = c = getch()))
+      ;
   if(isdigit(c)) /* collect integer part */
     while(isdigit(s[++i] = c = getch()))
       ;
