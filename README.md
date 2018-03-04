@@ -76,7 +76,7 @@ A "show my work" repo for my C studies. This repository originally consisted of 
 - [x] 5-5
 - [x] 5-6
 - [ ] 5-7
-- [ ] 5-8
+- [x] 5-8
 - [ ] 5-9
 - [ ] 5-10
 - [ ] 5-11
