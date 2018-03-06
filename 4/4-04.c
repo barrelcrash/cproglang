@@ -127,7 +127,7 @@ void swapTop(void) {
 }
 
 void clearStack(void) {
-  sp = 0;
+  sp = 0; // not safe!
 }
 
 int getch(void);
