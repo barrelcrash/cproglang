@@ -13,6 +13,11 @@
 int getop(char []);
 void push(double);
 double pop(void);
+double getTop(void);
+void swapTop(void);
+void clearStack(void);
+int getch(void);
+void ungetch(int);
 
 /* reverse Polish calculator */
 
@@ -44,14 +49,26 @@ int main(void)
         if(op2 != 0.0)
           push(pop() / op2);
         else
-          printf("error: zero divisor\n");
+          printf("divide error: zero divisor\n");
         break;
       case '%':
         op2 = pop();
         if (op2 != 0.0)
           push(fmod(pop(), op2));
         else
-          printf("error: zero divisor\n");
+          printf("modulo error: zero divisor\n");
+        break;
+      case '?':
+        printf("current top: %f\n", getTop());
+        break;
+      case '@':
+        push(getTop());
+        break;
+      case '~':
+        swapTop();
+        break;
+      case '!':
+        clearStack();
         break;
       case '\n':
         printf("\t%.8g\n", pop());
@@ -75,19 +92,42 @@ void push(double f)
   if(sp < MAXVAL)
     val[sp++] = f;
   else
-    printf("error: stack full, can't push %g\n", f);
+    printf("push error: stack full, can't push %g\n", f);
 }
 
 /* pop: pop and return top value from stack */
 double pop(void)
 {
-  if(sp > 0)
+  if (sp > 0) {
     return val[--sp];
-  else
-  {
-    printf("error: stack empty\n");
+  } else {
+    printf("pop error: stack empty\n");
     return 0.0;
   }
+}
+
+double getTop(void) {
+  if (sp > 0) {
+    return val[sp - 1];
+  } else {
+    printf("getTop error: stack empty\n");
+    return 0.0;
+  }
+}
+
+void swapTop(void) {
+  if (sp > 1) {
+    double top = pop();
+    double next = pop();
+    push(top);
+    push(next);
+  } else {
+    printf("swapTop error: not enough elements in stack");
+  }
+}
+
+void clearStack(void) {
+  sp = 0;
 }
 
 int getch(void);
@@ -123,6 +163,7 @@ int getop(char s[])
     while(isdigit(s[++i] = c = getch()))
       ;
   s[i] = '\0';
+
   if(c != EOF)
     ungetch(c);
   return NUMBER;
@@ -143,4 +184,3 @@ void ungetch(int c) /* push character back on input */
   else
     buf[bufp++] = c;
 }
-
