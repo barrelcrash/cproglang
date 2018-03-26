@@ -14,31 +14,36 @@
 #define BUFSIZE 100
 #define MAXOP 100 /* max size of operand or operator */
 #define MAXVAL  100 /* maximum depth of val stack */
+#define MAXVARS 26
 #define NUMBER '0' /* signal that a number was found */
 
 int getop(char []);
 void push(double);
 double pop(void);
+
 double getTop(void);
 void swapTop(void);
 void clearStack(void);
+
 int getch(void);
 void ungetch(int);
 
-/* reverse Polish calculator */
+int isVar(int);
+int getVarValue(int);
+void setVarValue(int, double);
 
+/* reverse Polish calculator */
 int main(void)
 {
   int type;
-  double op1;
-  double op2;
+  double op1, op2, r;
   char s[MAXOP];
 
   while((type = getop(s)) != EOF)
   {
     switch(type)
     {
-      case NUMBER:
+      case NUMBER: // == 0
         push(atof(s));
         break;
       case '+':
@@ -81,23 +86,34 @@ int main(void)
       case 'e':
         push(exp(pop()));
         break;
-      case '?':
+      case '?': // queries top of stack
         printf("current top: %f\n", getTop());
         break;
-      case '@':
+      case '@': // duplicates top value of stack
         push(getTop());
         break;
-      case '~':
+      case '~': // swaps top two numbers on stack
         swapTop();
         break;
       case '!':
         clearStack();
         break;
+      case '>':
+        r = pop();
+        setVarValue(getop(s), r);
+        push(r);
+        break;
       case '\n':
-        printf("\t%.8g\n", pop());
+        r = pop();
+        setVarValue('p', r);
+        printf("\t%.8g\n", r);
         break;
       default:
-        printf("error: unknown command %s\n", s);
+        if (isVar(type)) {
+          push(getVarValue(type));
+        } else {
+          printf("error: unknown command %s\n", s);
+        }
         break;
     }
   }
@@ -138,6 +154,7 @@ double getTop(void) {
   }
 }
 
+/* swapTop: swap top two items on stack */
 void swapTop(void) {
   if (sp > 1) {
     double top = pop();
@@ -149,12 +166,10 @@ void swapTop(void) {
   }
 }
 
+/* clearStack: clear the entire stack */
 void clearStack(void) {
   sp = 0; // not safe!
 }
-
-int getch(void);
-void ungetch(int);
 
 /* getop: get next operator or numeric operand */
 int getop(char s[])
@@ -192,6 +207,10 @@ int getop(char s[])
   return NUMBER;
 }
 
+
+/*
+ * CHAR BUFFER
+ */
 char buf[BUFSIZE]; /* buffer for ungetch */
 int bufp = 0; /* next free position in buf */
 
@@ -207,3 +226,28 @@ void ungetch(int c) /* push character back on input */
   else
     buf[bufp++] = c;
 }
+
+/*
+ * VARIABLES
+ */
+double varbuf[MAXVARS] = { 0.0 };
+
+int isVar(int c)
+{
+  return (c >= 'a') && (c <= 'z');
+}
+
+void setVarValue(int c, double v)
+{
+  if (isVar(c)) {
+    varbuf[c - 'a'] = v;
+  } else {
+    printf("setVarValue: not a character a-z\n");
+  }
+}
+
+int getVarValue(int c)
+{
+  return varbuf[c - 'a'];
+}
+
