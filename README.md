@@ -59,7 +59,7 @@ A "show my work" repo for my C studies. This repository originally consisted of 
 - [x] 4-4
 - [x] 4-5
 - [x] 4-6
-- [ ] 4-7
+- [x] 4-7
 - [ ] 4-8
 - [ ] 4-9
 - [ ] 4-10
