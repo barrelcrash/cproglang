@@ -11,6 +11,8 @@
 
 /** defines **/
 
+#define KILO_VERSION "0.0.1"
+
 #define CTRL_KEY(k) ((k) & 0x1f)
 
 /** data **/
@@ -124,9 +126,24 @@ void abFree(struct abuf *ab) {
 void editorDrawsRows(struct abuf *ab) {
   int y;
   for (y = 0; y < E.screenrows; y++) {
-    abAppend(ab, "~", 1);
+    if (y == E.screenrows / 3) {
+      char welcome[80];
+      int welcomelen = snprintf(welcome, sizeof(welcome),
+          "Kilo editor -- version %s", KILO_VERSION);
+      if (welcomelen > E.screencols) welcomelen = E.screencols;
+      int padding = (E.screencols - welcomelen) / 2;
+      if (padding) {
+        abAppend(ab, "~", 1);
+        padding--;
+      }
+      while (padding--) abAppend(ab, " ", 1);
+      abAppend(ab, welcome, welcomelen);
+    } else {
+      abAppend(ab, "~", 1);
+    }
 
-    // we don't want ot add return on the last row
+    abAppend(ab, "\x1b[K", 3); // clear lines as they are redrawn
+    // we don't want to add return on the last row
     if (y < E.screenrows - 1) {
       abAppend(ab, "\r\n", 2);
     }
@@ -136,12 +153,13 @@ void editorDrawsRows(struct abuf *ab) {
 void editorRefreshScreen() {
   struct abuf ab = ABUF_INIT;
 
-  abAppend(&ab, "\x1b[2J", 4); // clear screen
+  abAppend(&ab, "\x1b[?25l", 6); // hide cursor
   abAppend(&ab, "\x1b[H", 3); // put cursor at top, equiv. to [1;1H
 
   editorDrawsRows(&ab);
 
   abAppend(&ab, "\x1b[H", 3); // put cursor at top, equiv. to [1;1H
+  abAppend(&ab, "\x1b[?25h", 6); // show cursor
 
   write(STDOUT_FILENO, ab.b, ab.len);
   abFree(&ab);
