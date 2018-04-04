@@ -8,14 +8,31 @@
 #include <stdio.h>
 
 #define MAX 5000
+#define MAX_RULES 100
 
-int main(int argc, char *argv[]) {
+#define RULE_INIT {NULL, 0, NULL, 0}
+
+struct rule {
+  char *key;
+  int keylen;
+  char *value;
+  int valuelen;
+};
+
+/** global variables **/
+struct rule rules[MAX_RULES];
+int ruleslen = 0;
+
+/** function declarations **/
+void parseRuleString(char**);
+
+int main(int argc, char **argv) {
 
   int opt;
 
   // option flags
-  while (--argc > 0 && (*++argv)[0] == '-') {
-    while ((opt = *++argv[0])) {
+  while (--argc > 0 && *(*++argv) == '-') {
+    while ((opt = *++(*argv))) {
       switch (opt) {
         case 'x':
           printf("sample opt1 found\n");
@@ -27,14 +44,17 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  char result[MAX];
-  int ruleChar, i = 0;
-
-  while ((ruleChar = *argv[0]++)) {
-    result[i++] = ruleChar;
-  }
-
-  result[i] = '\n';
-
-  printf(result);
+  parseRuleString(argv); 
 }
+
+// TODO: create dynamic rule building
+
+void parseRuleString(char **s) {
+  printf("rule string: %s\n", *s);
+  int rulelen = sizeof(*s) / sizeof(**s);
+
+  // TODO: implement literal rule parsing
+  while (--rulelen > 0) {
+  }
+}
+
