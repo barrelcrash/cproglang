@@ -7,3 +7,6 @@
 
 !*.c
 !Makefile
+
+kilo/kilo
+regen/regen
