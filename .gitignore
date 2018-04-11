@@ -5,6 +5,5 @@
 *.stackdump
 *.out
 
-*
 !*.c
 !Makefile
