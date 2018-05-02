@@ -13,6 +13,9 @@
 
 #define MAX 1000
 
+int opcmp(char*, char[]);
+int isvalidop(char*);
+
 float fstack[MAX]; // input value stack
 int fi = 0; // current free pos in fstack
 
@@ -23,7 +26,7 @@ int main(int argc, char *argv[]) {
     if (isdigit((*++argv)[0])) {
       *(fstack + fi++) = atof(*argv);
     } else {
-      if (strcmp(*argv, "+") != 0) {
+      if (!isvalidop(*argv)) {
         printf("expr: character is not a digit or operand\n");
       } else {
 
@@ -33,8 +36,14 @@ int main(int argc, char *argv[]) {
         top = *(fstack + --fi);
         next = *(fstack + --fi);
 
-        if (strcmp(*argv, "+") == 0) {
+        if (opcmp(*argv, "+")) {
           *(fstack + fi++) = top + next;
+        } else if (opcmp(*argv, "-")) {
+          *(fstack + fi++) = top - next;
+        } else if (opcmp(*argv, "x")) {
+          *(fstack + fi++) = top * next;
+        } else if (opcmp(*argv, "/")) {
+          *(fstack + fi++) = top / next;
         }
       }
     }
@@ -45,3 +54,13 @@ int main(int argc, char *argv[]) {
   return 0;
 }
 
+int opcmp(char *argv, char *op) {
+  return strcmp(argv, op) == 0;
+}
+
+int isvalidop(char *argv) {
+  return opcmp(argv, "+")
+          || opcmp(argv, "-")
+          || opcmp(argv, "x")
+          || opcmp(argv, "/");
+}
