@@ -10,14 +10,34 @@
 #define MAXWORD 100
 
 int getword(char *, int);
+int isvalidchar(int);
+
+// TODO: finish keytab
+struct key {
+  char *word;
+  int count;
+} keytab[] = {
+  "auto", 0,
+  "break", 0,
+  "case", 0
+};
 
 int main() {
   int n;
   char word[MAXWORD];
 
   while(getword(word, MAXWORD) !=EOF)
-    printf("%s\n", word);
+    if (isalpha(word[0]))
+      if ((n = binsearch(word, keytab, NKEYS)) >= 0)
+        keytab[n].count++;
+  for (n = 0; n < NKEYS; n++)
+    if (keytab[n].count > 0)
+      printf("%4d %s\n",
+          keytab[n].count, keytab[n].word);
+  return 0;
 }
+
+// TODO: copy over binsearch
 
 int getword(char *word, int lim) {
   int c, getch(void);
@@ -33,12 +53,16 @@ int getword(char *word, int lim) {
     return c;
   }
   for ( ; --lim > 0; w++)
-    if (!isalnum(*w = getch())) {
+    if (!isvalidchar(*w = getch())) {
       ungetch(*w);
       break;
     }
   *w = '\0';
   return word[0];
+}
+
+int isvalidchar(int c) {
+  return isalnum(c) || c =='_';
 }
 
 /*
