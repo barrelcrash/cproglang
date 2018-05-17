@@ -1,9 +1,14 @@
 /* this program forms the basis on which exercises 4-3 through 4-10 build */
 
-// An alternate organization uses getline to read an
+// An alternate organization uses getlinec to read an
 // entire input line; this makes getch and ungetch
 // unnecessary. Revise the calculator to use this
 // approach.
+//
+// student note: I assume authors here mean their
+// implementation of getline from chapter 2, not the
+// stdio function. Renaming the K_R implementation
+// to 'getlinec'.
 
 #include <ctype.h>
 #include <math.h>
@@ -24,6 +29,7 @@ double getTop(void);
 void swapTop(void);
 void clearStack(void);
 
+int getlinec(char[], int);
 int getch(void);
 void ungetch(int);
 void ungets(char[]);
@@ -228,6 +234,19 @@ int getop(char s[])
   return NUMBER;
 }
 
+/* getlinec: read a line into s, return length */
+int getlinec(char s[], int lim) {
+  int c, i;
+
+  for (i = 0; i < lim - 1 && (c = getchar()) != EOF && c != '\n'; ++i)
+    s[i] = c;
+  if (c == '\n') {
+    s[i] = c;
+    ++i;
+  }
+  s[i] = '\0';
+  return i;
+}
 
 /*
  * CHAR BUFFER
