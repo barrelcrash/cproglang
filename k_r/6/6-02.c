@@ -1,3 +1,16 @@
+/*
+ * Write a program that reads a C program and prints in
+ * alphabetical order each group of variable names that
+ * are identical in the first 6 characters, but different
+ * somewhere thereafter. Don't count words within strings
+ * and comments. Make 6 a parameter that can be set from
+ * the command line.
+ *
+ * Student note: all criteria fulfilled except for
+ * "words within strings and comments", as I have not
+ * been writing these programs to accept actual C code.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
