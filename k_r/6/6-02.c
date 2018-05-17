@@ -7,10 +7,10 @@
 #define MAXWORD 100
 
 struct tnode {
-  char *word;
-  int count;
   struct tnode *left;
   struct tnode *right;
+  int count;
+  char *word[];
 };
 
 int getword(char *, int);
@@ -20,7 +20,7 @@ struct tnode *talloc(void);
 void treeprint(struct tnode *);
 int isvalidchar(int);
 
-/* similar var count */
+/* similar var grouping */
 int main() {
   struct tnode *root;
   char word[MAXWORD];
@@ -36,14 +36,24 @@ int main() {
 /* addtree: add a node with w, at or below p */
 struct tnode *addtree(struct tnode *p, char *w) {
   int cond;
-  if (p == NULL) {
+  if (p == NULL) { // a new word has arrived
     p = talloc();
-    p->word = strdup(w);
-    p-> count = 1;
-    p->left = p->right = NULL;
-
-  } else if ((cond = strcmp(w, p->word)) == 0)
+    (*p->word)[0] = strdup(w);
     p->count++;
+    p->left = p->right = NULL;
+    // compare - same up to six, but not the same word
+  } else if ((cond = strncmp(w, p->word[0], 6)) == 0)
+    int i;
+    int present;
+    for (i = 0; i < count; i++) {
+      if (strcmp(w, p->word[i]) == 0) {
+        present = 1;
+      }
+    }
+    if (present) {
+      (*p->word)[p->count] = strdup(w);
+      p->count++;
+    }
   else if (cond < 0)
     p->left = addtree(p->left, w);
   else
@@ -55,13 +65,14 @@ struct tnode *addtree(struct tnode *p, char *w) {
 void treeprint(struct tnode *p) {
   if (p != NULL) {
     treeprint(p->left);
-    printf("%4d %s\n", p->count, p->word);
-    treeprint(p->right);
-  }
+    // loop through string array
+    // printf("%4d %s\n", p->count, p->word);
+    treeprint(p->right); }
 }
 
 struct tnode *talloc(void) {
-  return (struct tnode *) malloc(sizeof(struct tnode));
+  // allocate space for 100 100-char words on top of struct itself
+  return (struct tnode *) malloc(sizeof(struct tnode) + (MAXWORD * (MAXWORD * sizeof(char))));
 }
 
 int getword(char *word, int lim) {
