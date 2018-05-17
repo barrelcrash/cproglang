@@ -15,49 +15,55 @@ struct tnode {
 
 int getword(char *, int);
 void ungetch(int);
-struct tnode *addtree(struct tnode *, char *);
+struct tnode *addtree(struct tnode *, char *, int);
 struct tnode *talloc(void);
 void treeprint(struct tnode *);
 int isvalidchar(int);
 
 /* similar var grouping */
-int main() {
+int main(int argc, char *argv[]) {
   struct tnode *root;
   char word[MAXWORD];
+  int ccount;
+
+  if (argc > 1)
+    ccount = (*++argv)[0] - '0';
+  else
+    ccount = 6;
 
   root = NULL;
   while (getword(word, MAXWORD) != EOF)
     if (isalpha(word[0]))
-      root = addtree(root, word);
+      root = addtree(root, word, ccount);
   treeprint(root);
   return 0;
 }
 
 /* addtree: add a node with w, at or below p */
-struct tnode *addtree(struct tnode *p, char *w) {
+struct tnode *addtree(struct tnode *p, char *w, int ccount) {
   int cond;
   if (p == NULL) { // a new word has arrived
     p = talloc();
-    (*p->word)[0] = strdup(w);
+    p->word[0] = strdup(w);
     p->count++;
     p->left = p->right = NULL;
     // compare - same up to six, but not the same word
-  } else if ((cond = strncmp(w, p->word[0], 6)) == 0)
+  } else if ((cond = strncmp(w, p->word[0], ccount)) == 0) {
     int i;
-    int present;
-    for (i = 0; i < count; i++) {
+    int present = 0;
+    for (i = 0; i < p->count; i++) {
       if (strcmp(w, p->word[i]) == 0) {
         present = 1;
       }
     }
-    if (present) {
-      (*p->word)[p->count] = strdup(w);
+    if (!present) {
+      p->word[p->count] = strdup(w);
       p->count++;
     }
-  else if (cond < 0)
-    p->left = addtree(p->left, w);
+  } else if (cond < 0)
+    p->left = addtree(p->left, w, ccount);
   else
-    p->right = addtree(p->right, w);
+    p->right = addtree(p->right, w, ccount);
   return p;
 }
 
@@ -65,8 +71,14 @@ struct tnode *addtree(struct tnode *p, char *w) {
 void treeprint(struct tnode *p) {
   if (p != NULL) {
     treeprint(p->left);
-    // loop through string array
-    // printf("%4d %s\n", p->count, p->word);
+
+    int i;
+
+    for (i = 0; i < p->count; i++) {
+      printf("%s\n", p->word[i]);
+    }
+    printf("\n");
+
     treeprint(p->right); }
 }
 
