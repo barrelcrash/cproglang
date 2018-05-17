@@ -5,10 +5,6 @@
  * somewhere thereafter. Don't count words within strings
  * and comments. Make 6 a parameter that can be set from
  * the command line.
- *
- * Student note: all criteria fulfilled except for
- * "words within strings and comments", as I have not
- * been writing these programs to accept actual C code.
  */
 
 #include <stdio.h>
@@ -18,6 +14,8 @@
 
 #define BUFSIZE 100
 #define MAXWORD 100
+#define TRUE 1
+#define FALSE 0
 
 struct tnode {
   struct tnode *left;
@@ -25,6 +23,10 @@ struct tnode {
   int count;
   char *word[];
 };
+
+int INSTR = 0;
+int INCMT = 0;
+int INMLC = 0;
 
 int getword(char *, int);
 void ungetch(int);
@@ -46,7 +48,7 @@ int main(int argc, char *argv[]) {
 
   root = NULL;
   while (getword(word, MAXWORD) != EOF)
-    if (isalpha(word[0]))
+    if (isalpha(word[0]) && !INSTR && !INCMT && !INMLC)
       root = addtree(root, word, ccount);
   treeprint(root);
   return 0;
@@ -66,7 +68,7 @@ struct tnode *addtree(struct tnode *p, char *w, int ccount) {
     int present = 0;
     for (i = 0; i < p->count; i++) {
       if (strcmp(w, p->word[i]) == 0) {
-        present = 1;
+        present = TRUE;
       }
     }
     if (!present) {
@@ -110,6 +112,28 @@ int getword(char *word, int lim) {
   if (c != EOF)
     *w++ = c;
   if (!isalpha(c)) {
+    // detect strings
+    if (c == '"' && INSTR)
+      INSTR = FALSE;
+    else
+      INSTR = TRUE;
+    // detect comment starts
+    if (c == '/') {
+      if ((c = getch()) == '/')
+        INCMT = TRUE;
+        ungetch(c);
+      if ((c = getch()) == '*')
+        INMLC = TRUE;
+        ungetch(c);
+    // detect comment ends
+    if (c == '*')
+      if ((c = getch()) == '/')
+        INMLC = FALSE;
+        ungetch(c);
+    if (c == '\n' && INCMT)
+      INCMT = FALSE;
+    }
+
     *w = '\0';
     return c;
   }
