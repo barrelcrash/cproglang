@@ -2,7 +2,7 @@
 
 A "show my work" repo for my C studies. This repository started as exercises from K&R's [The C Programming Language, 2nd ed](https://en.wikipedia.org/wiki/The_C_Programming_Language). It is still primarily that, but has had other exercises and projects added to it. Directories are as follows:
 
-* Numbered directories - K&R book chapters, programs in those directories are answers to the exercises described at the end of chapter sections.
+* `k_r` - Contains numeric directories, each a K&R book chapter, programs in those directories are answers to the exercises described at the end of chapter sections.
 * `kilo` - a project based on [snaptoken](https://github.com/snaptoken)'s [tutorial](https://github.com/snaptoken/kilo-tutorial) to build a fully functional terminal text editor in about 1000 lines of code.
 * `regency` - implementing a regex-based string generator as command-line utility.
 * `other` - exercises not found in the book, their source will be noted in the files themselves.
