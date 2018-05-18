@@ -8,15 +8,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <strings.h>
+#include <time.h>
 
 #define MAX 5000
 #define MAX_RULES 100
+#define MAX_DIGIT 9
 
 #define RULE_INIT {0, NULL, 0}
 
 enum ruletypes {
   INVALID = 0,
-  LITERAL
+  LITERAL,
+  DIGIT
 };
 
 struct rule {
@@ -31,8 +34,10 @@ int ruleslen = 0;
 
 /** function declarations **/
 void parseRuleString(struct rule*, char**);
-struct rule *createRule(char[]);
 char *concatRuleValues(struct rule*);
+
+struct rule *createLiteral(char[]);
+struct rule *createDigitRule();
 
 int main(int argc, char **argv) {
 
@@ -71,20 +76,45 @@ char *concatRuleValues(struct rule *rulep) {
 }
 
 void parseRuleString(struct rule *rulep, char **s) {
-
-  int slen = strlen(*s);
-
-  // TODO: implement digit rule parsing
-  while (--slen >= 0) {
-    char buf[] = {*(*s)++, '\0'};
-    *rulep = *createRule(buf);
-    rulep++;
-  }
+  do {
+    if (**s == '\\') {
+      if (*++(*s) == 'd') {
+        *rulep = *createDigitRule();
+        rulep++;
+      }
+    } else {
+      char buf[] = {**s, '\0'};
+      *rulep = *createLiteral(buf);
+      rulep++;
+    }
+  } while (*(*s)++ != '\0');
 }
 
-struct rule *createRule(char token[]) {
-  struct rule *temp = malloc(sizeof(struct rule));
+struct rule *createLiteral(char token[]) {
+  struct rule *temp = (struct rule *) malloc(sizeof(struct rule));
   temp->type = LITERAL;
+  temp->value = strdup(token);
+  temp->valuelen = strlen(token);
+  return temp;
+}
+
+struct rule *createDigitRule() {
+  struct rule *temp = (struct rule *) malloc(sizeof(struct rule));
+
+  int div = RAND_MAX/(MAX_DIGIT + 1);
+  int val;
+
+  srand(time(NULL));
+  do {
+    rand();
+    val = rand() / div;
+  } while (val > MAX_DIGIT);
+
+  char token[] = {val + '0', '\0'};
+
+  printf("%d\n", val);
+
+  temp->type = DIGIT;
   temp->value = strdup(token);
   temp->valuelen = strlen(token);
   return temp;
