@@ -13,6 +13,8 @@
 #define BUFSIZE 100
 #define MAXWORD 100
 #define MAXLINE 100
+#define TRUE 1
+#define FALSE 0
 
 struct tnode {
   struct tnode *left;
@@ -23,6 +25,7 @@ struct tnode {
 };
 
 struct tnode *addtree(struct tnode *, char *, int);
+int isnoise(char *w);
 int isvalidchar(int);
 int getch(void);
 int getword(char *, int);
@@ -30,23 +33,43 @@ struct tnode *talloc(void);
 void treeprint(struct tnode *);
 void ungetch(int);
 
+// in a non-demo this list would be much longer
+static char* noisetab[] = {
+  "and",
+  "not",
+  "or",
+  "the",
+  NULL
+};
+
 /* similar var grouping */
 int main(int argc, char *argv[]) {
   struct tnode *root;
   char word[MAXWORD];
-  int c;
+  int c, i;
   int linenum = 1;
 
   root = NULL;
   while ((c = getword(word, MAXWORD)) != EOF) {
     if (c == '\n') {
       linenum++;
-    } else if (isalpha(word[0])) {
+    } else if (isalpha(word[0]) && !isnoise(word)) {
       root = addtree(root, word, linenum);
     }
   }
   treeprint(root);
   return 0;
+}
+
+int isnoise(char *w) {
+  int i;
+
+  for (i = 0; noisetab[i] != NULL; i++) {
+    if (strcmp(noisetab[i], w) == 0) {
+      return TRUE;
+    }
+  }
+  return FALSE;
 }
 
 /* addtree: add a node with w, at or below p */
