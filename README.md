@@ -39,7 +39,7 @@ A "show my work" repo for my C studies. This repository started as exercises fro
 - [x] 2-3
 - [x] 2-4
 - [x] 2-5
-- [ ] 2-6
+- [x] 2-6
 - [ ] 2-7
 - [ ] 2-8
 - [ ] 2-9
