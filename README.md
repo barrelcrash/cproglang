@@ -95,7 +95,7 @@ A "show my work" repo for my C studies. This repository started as exercises fro
 
 - [ ] 6-1
 - [x] 6-2
-- [ ] 6-3
+- [x] 6-3
 - [ ] 6-4
 - [ ] 6-5
 - [ ] 6-6
