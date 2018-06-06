@@ -1,2 +1,2 @@
-regen: regen.c
-	$(CC) regen.c -o regen -Wall -Wextra -pedantic -std=c99
+regency: regen.c
+	$(CC) regen.c -o regency -Wall -Wextra -pedantic -std=c99

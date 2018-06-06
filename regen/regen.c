@@ -138,8 +138,6 @@ struct rule *createDigitRule() {
 
 struct rule *createRangeRule(char buf[]) {
 
-  printf("%s\n", buf);
-
   struct rule *temp = (struct rule *) malloc(sizeof(struct rule));
 
   temp->type = RANGE;
