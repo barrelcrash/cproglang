@@ -24,23 +24,24 @@ enum ruletypes {
   RANGE
 };
 
-struct rule {
+typedef struct Rule Rule;
+struct Rule {
   int type;
   char *value;
   int valuelen;
 };
 
 /** global variables **/
-struct rule rules[MAX_RULES];
+Rule rules[MAX_RULES];
 int ruleslen = 0;
 
 /** function declarations **/
-void parseRuleString(struct rule*, char**);
-char *concatRuleValues(struct rule*);
+void parseRuleString(Rule*, char**);
+char *concatRuleValues(Rule*);
 
-struct rule *createLiteral(char[]);
-struct rule *createDigitRule();
-struct rule *createRangeRule(char[]);
+Rule *createLiteral(char[]);
+Rule *createDigitRule();
+Rule *createRangeRule(char[]);
 
 int randomNumberInclusive(int, int);
 char *strdupl(char *);
@@ -61,7 +62,7 @@ int main(int argc, char **argv) {
   }
 
   // initialize ruleset
-  struct rule rules[MAX_RULES];
+  Rule rules[MAX_RULES];
 
   if (argc != 1)
     printf("usage: \n");
@@ -73,7 +74,7 @@ int main(int argc, char **argv) {
   printf("%s\n", concatRuleValues(rules));
 }
 
-char *concatRuleValues(struct rule *rulep) {
+char *concatRuleValues(Rule *rulep) {
   char *temp = malloc(sizeof(char));
   while (--ruleslen != 0 && rulep->type > 0) {
     temp = realloc(temp, sizeof(temp) + sizeof(rulep->value));
@@ -83,7 +84,7 @@ char *concatRuleValues(struct rule *rulep) {
   return temp;
 }
 
-void parseRuleString(struct rule *rulep, char **s) {
+void parseRuleString(Rule *rulep, char **s) {
 
   do {
     if (**s == '\\') {
@@ -117,16 +118,16 @@ void parseRuleString(struct rule *rulep, char **s) {
   } while (*++(*s) != '\0');
 }
 
-struct rule *createLiteral(char token[]) {
-  struct rule *temp = (struct rule *) malloc(sizeof(struct rule));
+Rule *createLiteral(char token[]) {
+  Rule *temp = (Rule *) malloc(sizeof(Rule));
   temp->type = LITERAL;
   temp->value = (char *) strdupl(token);
   temp->valuelen = strlen(token);
   return temp;
 }
 
-struct rule *createDigitRule() {
-  struct rule *temp = (struct rule *) malloc(sizeof(struct rule));
+Rule *createDigitRule() {
+  Rule *temp = (Rule *) malloc(sizeof(Rule));
 
   char token[] = {randomNumberInclusive(0, MAX_DIGIT) + '0', '\0'};
 
@@ -136,9 +137,9 @@ struct rule *createDigitRule() {
   return temp;
 }
 
-struct rule *createRangeRule(char buf[]) {
+Rule *createRangeRule(char buf[]) {
 
-  struct rule *temp = (struct rule *) malloc(sizeof(struct rule));
+  Rule *temp = (Rule *) malloc(sizeof(Rule));
 
   temp->type = RANGE;
 
