@@ -39,11 +39,14 @@ int ruleslen = 0;
 void parseRuleString(Rule*, char**);
 char *concatRuleValues(Rule*);
 
+/* rule creation */
 Rule *createLiteral(char*);
 Rule *createDigitRule();
 Rule *createRangeRule(char[]);
-
 int randomNumberInclusive(int, int);
+
+/* memory allocation */
+Rule *newRule(int, char *);
 char *strdupl(char *);
 void *emalloc(unsigned);
 
@@ -85,6 +88,7 @@ char *concatRuleValues(Rule *rulep) {
   return temp;
 }
 
+/* newRule: allocate a new rule and populate its fields */
 Rule *newRule(int type, char *value) {
   Rule *newp = (Rule *) emalloc(sizeof(Rule));
   newp->type = type;
@@ -93,6 +97,10 @@ Rule *newRule(int type, char *value) {
   return newp;
 }
 
+/*
+ * parseRuleString: iterate through string and create rules base
+ * on the character sequences encountered
+ */
 void parseRuleString(Rule *rulep, char **s) {
 
   do {
@@ -127,15 +135,18 @@ void parseRuleString(Rule *rulep, char **s) {
   } while (*++(*s) != '\0');
 }
 
+/* createLiteral: creates a rule of the character passed to it */
 Rule *createLiteral(char *token) {
   return newRule(LITERAL, strdupl(token));
 }
 
+/* createDigitRule: creates a rule of a random number 0-9 */
 Rule *createDigitRule() {
   char token[] = {randomNumberInclusive(0, MAX_DIGIT) + '0', '\0'};
   return newRule(DIGIT, strdupl(token));
 }
 
+/* createRangeRule: creates a rule based on a bracketed range of characters */
 Rule *createRangeRule(char buf[]) {
   int possible[MAX]; // possible values
   unsigned int i, j, start, end;
@@ -163,11 +174,12 @@ Rule *createRangeRule(char buf[]) {
   return newRule(RANGE, strdupl(token));
 }
 
+/* createRangeRule: creates a rule based on a bracketed range of characters */
 int randomNumberInclusive(int l, int u) {
 
   if (u < l) {
-    printf("randomNumberInclusive: lower value greater than upper value");
-    return -1;
+    fprintf(stderr, "randomNumberInclusive: lower bound greater than upper bound");
+    exit(1);
   }
 
   int offset = u - l;
@@ -183,6 +195,7 @@ int randomNumberInclusive(int l, int u) {
   return val + l;
 }
 
+/* strdupl: allocate memory for and memcpy a string */
 char *strdupl(char *src) {
   size_t len = strlen(src) + 1;
   char *s = malloc(len);
@@ -191,10 +204,11 @@ char *strdupl(char *src) {
   return (char *) memcpy(s, src, len);
 }
 
+/* emalloc: malloc w/ error handling */
 void *emalloc(unsigned size) {
   void *p = malloc(size);
   if (p == NULL) {
-    fprintf(stderr, "out of memory!\n");
+    fprintf(stderr, "emalloc: out of memory!\n");
     exit(1);
   }
   return p;
