@@ -11,11 +11,8 @@
 #include <time.h>
 
 #define MAX 5000
-#define MAX_RULES 100
 #define MAXBUF 100
 #define MAX_DIGIT 9
-
-#define RULE_INIT {0, NULL, 0}
 
 enum ruletypes {
   INVALID = 0,
@@ -31,17 +28,20 @@ struct Rule {
   Rule *next;
 };
 
-/** global variables **/
-Rule rules[MAX_RULES];
-int ruleslen = 0;
+/*
+ * global variables
+ */
+Rule *ruleList;
 
 /*
  * function declarations
  */
-void parseRuleString(Rule*, char**);
-char *concatRuleValues(Rule*);
+/* input and output */
+void parseRuleString(char**);
+void printRules(Rule *);
 
 /* rule creation */
+Rule *add(Rule *, Rule *);
 Rule *createLiteral(char*);
 Rule *createDigitRule();
 Rule *createRangeRule(char[]);
@@ -52,6 +52,9 @@ Rule *newRule(int, char *);
 char *strdupl(char *);
 void *emalloc(unsigned);
 
+/*
+ * function definitions
+ */
 int main(int argc, char **argv) {
 
   int opt;
@@ -67,43 +70,37 @@ int main(int argc, char **argv) {
     }
   }
 
-  // initialize ruleset
-  Rule rules[MAX_RULES];
-
   if (argc != 1)
     printf("usage: \n");
 
   srand(time(NULL));
 
-  parseRuleString(&rules[0], argv);
+  parseRuleString(argv);
 
-  printf("%s\n", concatRuleValues(rules));
+  printRules(ruleList);
 }
 
-char *concatRuleValues(Rule *rulep) {
-  char *temp = malloc(sizeof(char));
-  while (--ruleslen != 0 && rulep->type > 0) {
-    temp = realloc(temp, sizeof(temp) + sizeof(rulep->value));
-    strcat(temp, rulep->value);
-    rulep++;
+void printRules(Rule *listp) {
+  char *result = emalloc(sizeof(char));
+  for ( ; listp != NULL; listp = listp->next) {
+    result = realloc(result, sizeof(result) + sizeof(listp->value));
+    strcat(result, listp->value);
   }
-  return temp;
+  printf("%s\n", result);
 }
 
 /*
  * parseRuleString: iterate through string and create rules base
  * on the character sequences encountered
  */
-void parseRuleString(Rule *rulep, char **s) {
+void parseRuleString(char **s) {
 
   do {
     if (**s == '\\') {
       if (*++(*s) == 'd') {
-        *rulep = *createDigitRule();
-        rulep++;
-        ruleslen++;
+        ruleList = add(ruleList, createDigitRule());
       }
-    } if (**s == '[') {
+    } else if (**s == '[') {
       char buf[MAXBUF];
       int i;
 
@@ -114,16 +111,12 @@ void parseRuleString(Rule *rulep, char **s) {
       }
 
       if (strlen(buf) > 0) {
-        *rulep = *createRangeRule(buf);
-        rulep++;
-        ruleslen++;
+        ruleList = add(ruleList, createRangeRule(buf));
       }
 
     } else {
       char buf[] = {**s, '\0'};
-      *rulep = *createLiteral(buf);
-      rulep++;
-      ruleslen++;
+      ruleList = add(ruleList, createLiteral(buf));
     }
   } while (*++(*s) != '\0');
 }
@@ -131,6 +124,19 @@ void parseRuleString(Rule *rulep, char **s) {
 /*
  * RULE CREATION
  */
+
+/* add: add a rule to the end of rule list */
+Rule *add(Rule *listp, Rule *newp) {
+  Rule *p;
+
+  if (listp == NULL)
+    return newp;
+  for (p = listp; p-> next != NULL; p = p->next)
+    ;
+
+  p->next = newp;
+  return listp;
+}
 
 /* createLiteral: creates a rule of the character passed to it */
 Rule *createLiteral(char *token) {
