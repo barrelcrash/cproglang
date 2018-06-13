@@ -31,13 +31,12 @@ struct Rule {
 /*
  * global variables
  */
-Rule *ruleList;
 
 /*
  * function declarations
  */
 /* input and output */
-void parseRuleString(char**);
+Rule *parseRuleString(Rule *, char**);
 void printRules(Rule *);
 
 /* rule creation */
@@ -71,11 +70,13 @@ int main(int argc, char **argv) {
   }
 
   if (argc != 1)
-    printf("usage: \n");
+    printf("usage: regency [-x] [pattern]\n");
 
   srand(time(NULL));
 
-  parseRuleString(argv);
+  Rule *ruleList = NULL;
+
+  ruleList = parseRuleString(ruleList, argv);
 
   printRules(ruleList);
 }
@@ -93,12 +94,12 @@ void printRules(Rule *listp) {
  * parseRuleString: iterate through string and create rules base
  * on the character sequences encountered
  */
-void parseRuleString(char **s) {
+Rule *parseRuleString(Rule *listp, char **s) {
 
   do {
     if (**s == '\\') {
       if (*++(*s) == 'd') {
-        ruleList = add(ruleList, createDigitRule());
+        listp = add(listp, createDigitRule());
       }
     } else if (**s == '[') {
       char buf[MAXBUF];
@@ -111,14 +112,16 @@ void parseRuleString(char **s) {
       }
 
       if (strlen(buf) > 0) {
-        ruleList = add(ruleList, createRangeRule(buf));
+        listp = add(listp, createRangeRule(buf));
       }
 
     } else {
       char buf[] = {**s, '\0'};
-      ruleList = add(ruleList, createLiteral(buf));
+      listp = add(listp, createLiteral(buf));
     }
   } while (*++(*s) != '\0');
+
+  return listp;
 }
 
 /*
@@ -129,9 +132,10 @@ void parseRuleString(char **s) {
 Rule *add(Rule *listp, Rule *newp) {
   Rule *p;
 
-  if (listp == NULL)
+  if (listp == NULL) {
     return newp;
-  for (p = listp; p-> next != NULL; p = p->next)
+  }
+  for (p = listp; p->next != NULL; p = p->next)
     ;
 
   p->next = newp;
