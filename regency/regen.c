@@ -35,7 +35,9 @@ struct Rule {
 Rule rules[MAX_RULES];
 int ruleslen = 0;
 
-/** function declarations **/
+/*
+ * function declarations
+ */
 void parseRuleString(Rule*, char**);
 char *concatRuleValues(Rule*);
 
@@ -43,7 +45,7 @@ char *concatRuleValues(Rule*);
 Rule *createLiteral(char*);
 Rule *createDigitRule();
 Rule *createRangeRule(char[]);
-int randomNumberInclusive(int, int);
+int randomIntInclusive(int, int);
 
 /* memory allocation */
 Rule *newRule(int, char *);
@@ -88,15 +90,6 @@ char *concatRuleValues(Rule *rulep) {
   return temp;
 }
 
-/* newRule: allocate a new rule and populate its fields */
-Rule *newRule(int type, char *value) {
-  Rule *newp = (Rule *) emalloc(sizeof(Rule));
-  newp->type = type;
-  newp->value = value;
-  newp->next = NULL;
-  return newp;
-}
-
 /*
  * parseRuleString: iterate through string and create rules base
  * on the character sequences encountered
@@ -135,6 +128,10 @@ void parseRuleString(Rule *rulep, char **s) {
   } while (*++(*s) != '\0');
 }
 
+/*
+ * RULE CREATION
+ */
+
 /* createLiteral: creates a rule of the character passed to it */
 Rule *createLiteral(char *token) {
   return newRule(LITERAL, strdupl(token));
@@ -142,7 +139,7 @@ Rule *createLiteral(char *token) {
 
 /* createDigitRule: creates a rule of a random number 0-9 */
 Rule *createDigitRule() {
-  char token[] = {randomNumberInclusive(0, MAX_DIGIT) + '0', '\0'};
+  char token[] = {randomIntInclusive(0, MAX_DIGIT) + '0', '\0'};
   return newRule(DIGIT, strdupl(token));
 }
 
@@ -166,19 +163,19 @@ Rule *createRangeRule(char buf[]) {
       continue; // literal charcter, add to possible and continue
     }
 
-    possible[j++] = randomNumberInclusive(start, end);
+    possible[j++] = randomIntInclusive(start, end);
   }
 
-  char token[] = {possible[randomNumberInclusive(0, j - 1)], '\0'};
+  char token[] = {possible[randomIntInclusive(0, j - 1)], '\0'};
 
   return newRule(RANGE, strdupl(token));
 }
 
-/* createRangeRule: creates a rule based on a bracketed range of characters */
-int randomNumberInclusive(int l, int u) {
+/* randomIntInclusive: return int between l to u, inclusive*/
+int randomIntInclusive(int l, int u) {
 
   if (u < l) {
-    fprintf(stderr, "randomNumberInclusive: lower bound greater than upper bound");
+    fprintf(stderr, "randomIntInclusive: lower bound greater than upper bound");
     exit(1);
   }
 
@@ -194,6 +191,20 @@ int randomNumberInclusive(int l, int u) {
 
   return val + l;
 }
+
+/*
+ * MEMORY ALLOCATION
+ */
+
+/* newRule: allocate a new rule and populate its fields */
+Rule *newRule(int type, char *value) {
+  Rule *newp = (Rule *) emalloc(sizeof(Rule));
+  newp->type = type;
+  newp->value = value;
+  newp->next = NULL;
+  return newp;
+}
+
 
 /* strdupl: allocate memory for and memcpy a string */
 char *strdupl(char *src) {
