@@ -28,6 +28,7 @@ typedef struct Rule Rule;
 struct Rule {
   int type;
   char *value;
+  Rule *next;
 };
 
 /** global variables **/
@@ -38,12 +39,13 @@ int ruleslen = 0;
 void parseRuleString(Rule*, char**);
 char *concatRuleValues(Rule*);
 
-Rule *createLiteral(char[]);
+Rule *createLiteral(char*);
 Rule *createDigitRule();
 Rule *createRangeRule(char[]);
 
 int randomNumberInclusive(int, int);
 char *strdupl(char *);
+void *emalloc(unsigned);
 
 int main(int argc, char **argv) {
 
@@ -83,6 +85,14 @@ char *concatRuleValues(Rule *rulep) {
   return temp;
 }
 
+Rule *newRule(int type, char *value) {
+  Rule *newp = (Rule *) emalloc(sizeof(Rule));
+  newp->type = type;
+  newp->value = value;
+  newp->next = NULL;
+  return newp;
+}
+
 void parseRuleString(Rule *rulep, char **s) {
 
   do {
@@ -117,29 +127,16 @@ void parseRuleString(Rule *rulep, char **s) {
   } while (*++(*s) != '\0');
 }
 
-Rule *createLiteral(char token[]) {
-  Rule *temp = (Rule *) malloc(sizeof(Rule));
-  temp->type = LITERAL;
-  temp->value = (char *) strdupl(token);
-  return temp;
+Rule *createLiteral(char *token) {
+  return newRule(LITERAL, strdupl(token));
 }
 
 Rule *createDigitRule() {
-  Rule *temp = (Rule *) malloc(sizeof(Rule));
-
   char token[] = {randomNumberInclusive(0, MAX_DIGIT) + '0', '\0'};
-
-  temp->type = DIGIT;
-  temp->value = (char *) strdupl(token);
-  return temp;
+  return newRule(DIGIT, strdupl(token));
 }
 
 Rule *createRangeRule(char buf[]) {
-
-  Rule *temp = (Rule *) malloc(sizeof(Rule));
-
-  temp->type = RANGE;
-
   int possible[MAX]; // possible values
   unsigned int i, j, start, end;
 
@@ -163,9 +160,7 @@ Rule *createRangeRule(char buf[]) {
 
   char token[] = {possible[randomNumberInclusive(0, j - 1)], '\0'};
 
-  temp->value = (char *) strdupl(token);
-
-  return temp;
+  return newRule(RANGE, strdupl(token));
 }
 
 int randomNumberInclusive(int l, int u) {
@@ -194,5 +189,14 @@ char *strdupl(char *src) {
   if (s == NULL)
     return NULL;
   return (char *) memcpy(s, src, len);
+}
+
+void *emalloc(unsigned size) {
+  void *p = malloc(size);
+  if (p == NULL) {
+    fprintf(stderr, "out of memory!\n");
+    exit(1);
+  }
+  return p;
 }
 
