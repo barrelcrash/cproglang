@@ -28,7 +28,6 @@ typedef struct Rule Rule;
 struct Rule {
   int type;
   char *value;
-  int valuelen;
 };
 
 /** global variables **/
@@ -122,7 +121,6 @@ Rule *createLiteral(char token[]) {
   Rule *temp = (Rule *) malloc(sizeof(Rule));
   temp->type = LITERAL;
   temp->value = (char *) strdupl(token);
-  temp->valuelen = strlen(token);
   return temp;
 }
 
@@ -133,7 +131,6 @@ Rule *createDigitRule() {
 
   temp->type = DIGIT;
   temp->value = (char *) strdupl(token);
-  temp->valuelen = strlen(token);
   return temp;
 }
 
@@ -167,7 +164,6 @@ Rule *createRangeRule(char buf[]) {
   char token[] = {possible[randomNumberInclusive(0, j - 1)], '\0'};
 
   temp->value = (char *) strdupl(token);
-  temp->valuelen = strlen(token);
 
   return temp;
 }
