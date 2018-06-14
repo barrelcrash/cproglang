@@ -17,13 +17,13 @@ At least one option flag will be added, but none have been as of yet.
 Regency current accepts the following patterns:
 
 * `\d`: a random digit
-* `[a-z]`: character ranges, produces a random character of the characters specified, based on ASCII value
+* `\w`: a random word character (a-z, A-Z, 0-9, \_)
+* `[a-z|]`: character ranges, produces a random character of the characters specified, based on ASCII value
+* `\y`: a word from the default dictionary, or the user-provided dictionary if present
 * All other characters are currently treated as literals
 
 I'd like to include the following patterns and features:
 
-* `\w`: a word from the default dictionary, or the user-provided dictionary if present
-* `-d dict.txt`: a list of whitespace-delimited words to be used by the `\w` pattern
+* `-d dict.txt`: a list of whitespace-delimited words to be used by the `\y` pattern
 * `{2}`, `{2,}`, `{2,5}`: quantifiers 
-* `ab|cd`: or statements
 
