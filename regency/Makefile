@@ -1,2 +1,2 @@
-regency: regen.c
-	$(CC) regen.c -o regency -Wall -Wextra -pedantic -std=c99
+regency: regen.o dictionary.o
+	$(CC) -o regency -Wall -Wextra -pedantic -std=c99 regen.o dictionary.o

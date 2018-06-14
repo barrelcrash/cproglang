@@ -32,6 +32,8 @@ struct Rule {
  * global variables
  */
 
+extern char *dict[];
+
 /*
  * function declarations
  */
@@ -100,6 +102,8 @@ Rule *parseRuleString(Rule *listp, char **s) {
     if (**s == '\\') {
       if (*++(*s) == 'd') {
         listp = add(listp, createDigitRule());
+      } else if (**s == 'w') {
+        listp = add(listp, createRangeRule("a-zA-Z0-9_"));
       }
     } else if (**s == '[') {
       char buf[MAXBUF];
@@ -163,6 +167,8 @@ Rule *createRangeRule(char buf[]) {
   for (i = 0; i < strlen(buf) - 1; i++) {
     if (buf[i] == ']') {
       break; // done creating range
+    } else if (buf[i] == '|') {
+      continue; // since creation is "positive", we just ignore OR
     } else if (buf[i] == '-' && i != 0) {
       start = buf[i - 1];
       end = buf[++i];
