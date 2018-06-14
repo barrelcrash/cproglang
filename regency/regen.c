@@ -30,7 +30,7 @@ struct Rule {
 };
 
 /*
- * global variables
+ * external variables
  */
 
 extern char *dict[];
