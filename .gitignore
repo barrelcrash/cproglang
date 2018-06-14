@@ -12,3 +12,4 @@
 
 kilo/kilo
 regency/regency
+regency/*.o
