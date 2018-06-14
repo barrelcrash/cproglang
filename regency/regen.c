@@ -1,5 +1,5 @@
 /*
- * regen
+ * regency
  *
  * generate strings using regex-like
  * patterns.
@@ -18,7 +18,8 @@ enum ruletypes {
   INVALID = 0,
   LITERAL,
   DIGIT,
-  RANGE
+  RANGE,
+  DICT
 };
 
 typedef struct Rule Rule;
@@ -33,6 +34,7 @@ struct Rule {
  */
 
 extern char *dict[];
+extern const int dict_length;
 
 /*
  * function declarations
@@ -46,6 +48,7 @@ Rule *add(Rule *, Rule *);
 Rule *createLiteral(char*);
 Rule *createDigitRule();
 Rule *createRangeRule(char[]);
+Rule *createDictRule();
 int randomIntInclusive(int, int);
 
 /* memory allocation */
@@ -104,6 +107,8 @@ Rule *parseRuleString(Rule *listp, char **s) {
         listp = add(listp, createDigitRule());
       } else if (**s == 'w') {
         listp = add(listp, createRangeRule("a-zA-Z0-9_"));
+      } else if (**s == 'y') {
+        listp = add(listp, createDictRule());
       }
     } else if (**s == '[') {
       char buf[MAXBUF];
@@ -187,6 +192,11 @@ Rule *createRangeRule(char buf[]) {
   return newRule(RANGE, strdupl(token));
 }
 
+/* createDictRule: create a rule from a random dictionary word */
+Rule *createDictRule() {
+  return newRule(DICT, dict[randomIntInclusive(0, dict_length - 1)]);
+}
+
 /* randomIntInclusive: return int between l to u, inclusive*/
 int randomIntInclusive(int l, int u) {
 
@@ -203,7 +213,7 @@ int randomIntInclusive(int l, int u) {
   do {
     rand();
     val = rand() / div;
-  } while (val > MAX_DIGIT);
+  } while (val > u);
 
   return val + l;
 }

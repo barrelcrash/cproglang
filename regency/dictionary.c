@@ -1,4 +1,7 @@
 // obtained from http://www.mit.edu/~ecprice/wordlist.10000
+//
+const int dict_length = 10000;
+
 char *dict[] = {
 "a",
 "aa",
