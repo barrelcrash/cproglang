@@ -49,6 +49,7 @@ Rule *createLiteral(char*);
 Rule *createDigitRule();
 Rule *createRangeRule(char[]);
 Rule *createDictRule();
+void repeatLastRule(Rule *, char[]);
 int randomIntInclusive(int, int);
 
 /* memory allocation */
@@ -102,6 +103,7 @@ void printRules(Rule *listp) {
 Rule *parseRuleString(Rule *listp, char **s) {
 
   do {
+    // escaped chars
     if (**s == '\\') {
       if (*++(*s) == 'd') {
         listp = add(listp, createDigitRule());
@@ -109,7 +111,12 @@ Rule *parseRuleString(Rule *listp, char **s) {
         listp = add(listp, createRangeRule("a-zA-Z0-9_"));
       } else if (**s == 'y') {
         listp = add(listp, createDictRule());
+      } else {
+        char buf[] = {**s, '\0'};
+        listp = add(listp, createLiteral(buf));
       }
+
+    // bracketed ranges
     } else if (**s == '[') {
       char buf[MAXBUF];
       int i;
@@ -124,6 +131,22 @@ Rule *parseRuleString(Rule *listp, char **s) {
         listp = add(listp, createRangeRule(buf));
       }
 
+    // quantifiers
+    } else if (**s == '{') {
+      char buf[MAXBUF];
+      int i;
+
+      i = 0;
+
+      while(*++(*s) != '}') {
+        buf[i++] = **s;
+      }
+
+      if (strlen(buf) > 0) {
+        repeatLastRule(listp, buf);
+      }
+
+    // all other characters
     } else {
       char buf[] = {**s, '\0'};
       listp = add(listp, createLiteral(buf));
@@ -195,6 +218,10 @@ Rule *createRangeRule(char buf[]) {
 /* createDictRule: create a rule from a random dictionary word */
 Rule *createDictRule() {
   return newRule(DICT, dict[randomIntInclusive(0, dict_length - 1)]);
+}
+
+
+void repeatLastRule(Rule *listp, char buf[]) {
 }
 
 /* randomIntInclusive: return int between l to u, inclusive*/
