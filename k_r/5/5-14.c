@@ -9,25 +9,36 @@
 
 #define MAXLINES 5000
 #define MAXLEN 1000
+
 char *lineptr[MAXLINES];
 
+/* function decs */
+void cust_qsort(void *lineptr[], int left, int right, int order,
+    int (*comp)(void*, void*));
+int numcmp(char*, char*);
+void swap(void*[], int, int);
 int readlines(char*[], int);
 void writelines(char*[], int);
 int cust_getline(char[], int);
 
-void cust_qsort(void *lineptr[], int left, int right,
-    int (*comp)(void *, void *));
-int numcmp(char *, char *);
-
+/* 5-14 */
 int main(int argc, char *argv[]) {
   int nlines;
   int numeric = 0;
+  int descending = 0;
 
-  if (argc > 1 && strcmp(argv[1], "-n") == 0)
-    numeric = 1;
+  if (argc > 1) {
+    for (int i = 1; i < argc; i++) {
+      if (strcmp(argv[i], "-n") == 0)
+        numeric = 1;
+      if (strcmp(argv[i], "-r") == 0)
+        descending = 1;
+    }
+  }
   if ((nlines = readlines(lineptr, MAXLINES)) >= 0) {
-    cust_qsort((void **) lineptr, 0, nlines - 1,
+    cust_qsort((void **) lineptr, 0, nlines - 1, descending,
           (int (*)(void*,void*))(numeric ? numcmp : strcmp));
+    printf("\nSorted result:\n");
     writelines(lineptr, nlines);
   } else {
     printf("input too big to sort\n");
@@ -36,21 +47,19 @@ int main(int argc, char *argv[]) {
 }
 
 /* cust_qsort: sort v[left]...v[right] into increasing order */
-void cust_qsort(void *v[], int left, int right,
+void cust_qsort(void *v[], int left, int right, int order,
     int (*comp)(void *, void *)) {
-  int i, last;
-  void swap(void *v[], int, int);
 
   if (left >= right)
     return;
   swap(v, left, (left + right)/2);
-  last = left;
-  for (i = left + 1; i <= right; i++)
-    if ((*comp)(v[i], v[left]) < 0)
+  int last = left;
+  for (int i = left + 1; i <= right; i++)
+    if (order ? (*comp)(v[i], v[left]) > 0 : (*comp)(v[i], v[left]) < 0)
       swap(v, ++last, i);
   swap(v, left, last);
-  cust_qsort(v, left, last - 1, comp);
-  cust_qsort(v, last + 1, right, comp);
+  cust_qsort(v, left, last - 1, order, comp);
+  cust_qsort(v, last + 1, right, order, comp);
 }
 
 int numcmp(char *s1, char *s2) {
