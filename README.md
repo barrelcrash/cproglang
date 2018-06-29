@@ -84,7 +84,7 @@ A "show my work" repo for my C studies. This repository started as exercises fro
 - [ ] 5-12
 - [ ] 5-13
 - [x] 5-14
-- [ ] 5-15
+- [x] 5-15
 - [ ] 5-16
 - [ ] 5-17
 - [ ] 5-18
