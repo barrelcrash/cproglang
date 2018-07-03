@@ -17,7 +17,7 @@ void cust_qsort(
     void *lineptr[],
     int left,
     int right,
-    int order,
+    int descending,
     int caseFlag,
     int directoryFlag,
     int (*comp)(void*, void*, int, int));
@@ -44,16 +44,14 @@ int main(int argc, char *argv[]) {
       if (strcmp(argv[i], "-n") == 0)
         numeric = 1;
       if (strcmp(argv[i], "-r") == 0)
-        printf("descending order\n");
         descending = 1;
       if (strcmp(argv[i], "-f") == 0)
-        printf("case insensitive\n");
         caseFlag = 1;
       if (strcmp(argv[i], "-d") == 0)
-        printf("directory sorting\n");
         directoryFlag = 1;
     }
   }
+
   if ((nlines = readlines(lineptr, MAXLINES)) >= 0) {
     cust_qsort(
         (void **) lineptr,
@@ -72,7 +70,7 @@ int main(int argc, char *argv[]) {
 }
 
 /* cust_qsort: sort v[left]...v[right] into increasing order */
-void cust_qsort(void *v[], int left, int right, int order, int caseFlag, int directoryFlag,
+void cust_qsort(void *v[], int left, int right, int descending, int caseFlag, int directoryFlag,
     int (*comp)(void *, void *, int, int)) {
 
   if (left >= right)
@@ -80,13 +78,13 @@ void cust_qsort(void *v[], int left, int right, int order, int caseFlag, int dir
   swap(v, left, (left + right)/2);
   int last = left;
   for (int i = left + 1; i <= right; i++)
-    if (order ?
-        (*comp)(v[i], v[left], caseFlag, directoryFlag) > 0
-        : (*comp)(v[i], v[left], caseFlag, directoryFlag) < 0)
+    if (descending ?
+        ((*comp)(v[i], v[left], caseFlag, directoryFlag) > 0)
+        : ((*comp)(v[i], v[left], caseFlag, directoryFlag) < 0))
       swap(v, ++last, i);
   swap(v, left, last);
-  cust_qsort(v, left, last - 1, order, caseFlag, directoryFlag, comp);
-  cust_qsort(v, last + 1, right, order, caseFlag, directoryFlag, comp);
+  cust_qsort(v, left, last - 1, descending, caseFlag, directoryFlag, comp);
+  cust_qsort(v, last + 1, right, descending, caseFlag, directoryFlag, comp);
 }
 
 int numcmp(char *s1, char *s2, int caseFlag, int directoryFlag) {
@@ -133,11 +131,11 @@ char lowercase(char c) {
 }
 
 int isAlphaNumWs(char c) {
-  if (c >= 'A' || c <= 'Z'
-      || c >= 'a' || c <= 'z'
-      || c >= '0' || c <= '9'
-      || c == ' '
-      || c == '\t')
+  if ((c >= 'A' && c <= 'Z')
+      || (c >= 'a' && c <= 'z')
+      || (c >= '0' && c <= '9')
+      || (c == ' ')
+      || (c == '\t'))
     return 1;
 
   return 0;
