@@ -4,7 +4,7 @@ A "show my work" repo for my C studies. This repository started as exercises fro
 
 * `k_r` - Contains numeric directories, each a K&R book chapter, programs in those directories are answers to the exercises described at the end of chapter sections.
 * `kilo` - a project based on [snaptoken](https://github.com/snaptoken)'s [tutorial](https://github.com/snaptoken/kilo-tutorial) to build a fully functional terminal text editor in about 1000 lines of code.
-* `regency` - implementing a regex-based string generator as command-line utility.
+* `regency` - a "final project" of sorts, implementing a regex-based string generator as command-line utility, now located [here](https://github.com/barrelcrash/regency)
 * `other` - exercises not found in the book, their source will be noted in the files themselves.
 
 ### 1
